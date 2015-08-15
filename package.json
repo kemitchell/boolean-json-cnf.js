@@ -1,6 +1,6 @@
 {
   "name": "boolean-json-cnf",
-  "description": "convert boolean-json conjunctive normal form",
+  "description": "convert boolean-json to conjunctive normal form",
   "version": "1.0.0",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "devDependencies": {
