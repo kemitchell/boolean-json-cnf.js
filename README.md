@@ -5,56 +5,40 @@ var assert = require('assert')
 assert.deepEqual(
   normalize(
     { not: {
-        or: [
-          { variable: 'p' },
-          { variable: 'q' } ] } }),
+        or: [ 'p', 'q' ] } }),
   { and: [
-    { not: { variable: 'p' } },
-    { not: { variable: 'q' } } ] })
+    { not: 'p' },
+    { not: 'q' } ] })
 
 assert.deepEqual(
   normalize(
     { not: {
-        and: [
-          { variable: 'p' },
-          { variable: 'q' } ] } }),
+        and: [ 'p', 'q' ] } }),
   { or: [
-    { not: { variable: 'p' } },
-    { not: { variable: 'q' } } ] })
+    { not: 'p' },
+    { not: 'q' } ] })
 
 assert.deepEqual(
   normalize(
     { not: {
-        not: { variable: 'p' } } }),
-  { variable: 'p' })
+        not: 'p' } }),
+  'p')
 
 assert.deepEqual(
   normalize(
     { or: [
-        { variable: 'p' },
-        { and: [
-            { variable: 'q' },
-            { variable: 'r' } ] } ] }),
+        'p',
+        { and: [ 'q', 'r' ] } ] }),
   { and: [
-      { or: [
-          { variable: 'p' },
-          { variable: 'q' } ] },
-      { or: [
-          { variable: 'q' },
-          { variable: 'r' } ] } ] })
+      { or: [ 'p', 'q' ] },
+      { or: [ 'q', 'r' ] } ] })
 
 assert.deepEqual(
   normalize(
     { or: [
-        { and: [
-            { variable: 'q' },
-            { variable: 'r' } ] },
-        { variable: 'p' } ] }),
+        { and: [ 'q', 'r' ] },
+        'p' ] }),
   { and: [
-      { or: [
-          { variable: 'p' },
-          { variable: 'q' } ] },
-      { or: [
-          { variable: 'q' },
-          { variable: 'r' } ] } ] })
+      { or: [ 'p', 'q' ] },
+      { or: [ 'q', 'r' ] } ] })
 ```
