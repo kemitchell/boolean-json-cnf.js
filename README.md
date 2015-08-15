@@ -3,42 +3,32 @@ var normalize = require('boolean-json-cnf')
 var assert = require('assert')
 
 assert.deepEqual(
-  normalize(
-    { not: {
-        or: [ 'p', 'q' ] } }),
-  { and: [
-    { not: 'p' },
-    { not: 'q' } ] })
+  // ¬(p ∨ q)
+  normalize({ not: { or: [ 'p', 'q' ] } }),
+  // (¬p ∧ ¬q)
+  { and: [ { not: 'p' }, { not: 'q' } ] })
 
 assert.deepEqual(
-  normalize(
-    { not: {
-        and: [ 'p', 'q' ] } }),
-  { or: [
-    { not: 'p' },
-    { not: 'q' } ] })
+  // ¬(p ∧ q)
+  normalize({ not: { and: [ 'p', 'q' ] } }),
+  // (p ∨ q)
+  { or: [ { not: 'p' }, { not: 'q' } ] })
 
 assert.deepEqual(
-  normalize(
-    { not: {
-        not: 'p' } }),
+  // ¬¬p
+  normalize({ not: { not: 'p' } }),
+  // p
   'p')
 
 assert.deepEqual(
-  normalize(
-    { or: [
-        'p',
-        { and: [ 'q', 'r' ] } ] }),
-  { and: [
-      { or: [ 'p', 'q' ] },
-      { or: [ 'q', 'r' ] } ] })
+  // (p ∨ (q ∧ r))
+  normalize({ or: [ 'p', { and: [ 'q', 'r' ] } ] }),
+  // ((p ∨ q) ∧ (q ∨ r))
+  { and: [ { or: [ 'p', 'q' ] }, { or: [ 'q', 'r' ] } ] })
 
 assert.deepEqual(
-  normalize(
-    { or: [
-        { and: [ 'q', 'r' ] },
-        'p' ] }),
-  { and: [
-      { or: [ 'p', 'q' ] },
-      { or: [ 'q', 'r' ] } ] })
+  // ((q ∧ r) ∨ p)
+  normalize({ or: [ { and: [ 'q', 'r' ] }, 'p' ] }),
+  // ((p ∨ q) ∧ (q ∨ r))
+  { and: [ { or: [ 'p', 'q' ] }, { or: [ 'q', 'r' ] } ] })
 ```
