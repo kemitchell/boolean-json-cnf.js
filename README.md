@@ -23,12 +23,12 @@ assert.deepEqual(
 assert.deepEqual(
   // (p ∨ (q ∧ r))
   normalize({ or: [ 'p', { and: [ 'q', 'r' ] } ] }),
-  // ((p ∨ q) ∧ (q ∨ r))
-  { and: [ { or: [ 'p', 'q' ] }, { or: [ 'q', 'r' ] } ] })
+  // ((p ∨ q) ∧ (p ∨ r))
+  { and: [ { or: [ 'p', 'q' ] }, { or: [ 'p', 'r' ] } ] })
 
 assert.deepEqual(
   // ((q ∧ r) ∨ p)
   normalize({ or: [ { and: [ 'q', 'r' ] }, 'p' ] }),
-  // ((p ∨ q) ∧ (q ∨ r))
-  { and: [ { or: [ 'p', 'q' ] }, { or: [ 'q', 'r' ] } ] })
+  // ((p ∨ q) ∧ (p ∨ r))
+  { and: [ { or: [ 'p', 'q' ] }, { or: [ 'p', 'r' ] } ] })
 ```

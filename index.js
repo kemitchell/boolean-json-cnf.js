@@ -43,7 +43,7 @@ function booleanJSONCNF(expression) {
     return p }
 
   // Distribution
-  // (p ∨ (q ∧ r)) ⇔ ((p ∨ q) ∧ (q ∨ r))
+  // (p ∨ (q ∧ r)) ⇔ ((p ∨ q) ∧ (p ∨ r))
   else if (
     'or' in expression &&
     !isAVariable(expression.or[0]) &&
@@ -54,10 +54,10 @@ function booleanJSONCNF(expression) {
     return {
       and: [
         { or: [ p, q ] },
-        { or: [ q, r ] } ] } }
+        { or: [ p, r ] } ] } }
 
   // Distribution
-  // ((q ∧ r) ∨ p) ⇔ ((p ∨ q) ∧ (q ∨ r))
+  // ((q ∧ r) ∨ p) ⇔ ((p ∨ q) ∧ (p ∨ r))
   else if (
     'or' in expression &&
     !isAVariable(expression.or[1]) &&
@@ -68,7 +68,7 @@ function booleanJSONCNF(expression) {
     return {
       and: [
         { or: [ p, q ] },
-        { or: [ q, r ] } ] } }
+        { or: [ p, r ] } ] } }
 
   else {
     return expression } }
