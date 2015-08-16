@@ -7,6 +7,14 @@
     "defence-cli": "~1.0.1",
     "replace-require-self": "~1.0.0"
   },
+  "keywords": [
+    "algebra",
+    "boolean",
+    "boolean-json",
+    "calculus",
+    "logic",
+    "normalization"
+  ],
   "license": "MIT",
   "repository": "kemitchell/boolean-json-cnf.js",
   "scripts": {
