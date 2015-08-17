@@ -1,7 +1,13 @@
 ```javascript
 var normalize = require('boolean-json-cnf')
 var assert = require('assert')
+```
 
+`normalize` takes ands returns a [boolean-json](https://npmjs.com/packages/boolean-json-schema) object.
+
+# DeMorgan's Laws
+
+```javascript
 assert.deepEqual(
   // ¬(p ∨ q)
   normalize({ not: { or: [ 'p', 'q' ] } }),
@@ -13,13 +19,21 @@ assert.deepEqual(
   normalize({ not: { and: [ 'p', 'q' ] } }),
   // (p ∨ q)
   { or: [ { not: 'p' }, { not: 'q' } ] })
+```
 
+# Double Negation
+
+```javascript
 assert.deepEqual(
   // ¬¬p
   normalize({ not: { not: 'p' } }),
   // p
   'p')
+```
 
+# Distribution
+
+```javascript
 assert.deepEqual(
   // (p ∨ (q ∧ r))
   normalize({ or: [ 'p', { and: [ 'q', 'r' ] } ] }),
