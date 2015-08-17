@@ -1,7 +1,7 @@
 {
   "name": "boolean-json-cnf",
   "description": "convert boolean-json to conjunctive normal form",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "devDependencies": {
     "defence-cli": "~1.0.1",
