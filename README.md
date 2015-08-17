@@ -1,13 +1,14 @@
 ```javascript
 var normalize = require('boolean-json-cnf')
-var assert = require('assert')
 ```
 
-`normalize` takes ands returns a [boolean-json](https://npmjs.com/packages/boolean-json-schema) object.
+The package exports a function of one [boolean-json](https://npmjs.com/packages/boolean-json-schema) object.
 
 # DeMorgan's Laws
 
 ```javascript
+var assert = require('assert')
+
 assert.deepEqual(
   // ¬(p ∨ q)
   normalize({ not: { or: [ 'p', 'q' ] } }),
