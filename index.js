@@ -1,5 +1,4 @@
-function isAVariable(expression) {
-  return ( typeof expression === 'string' ) }
+module.exports = booleanJSONCNF
 
 function booleanJSONCNF(expression) {
   var p, q, r
@@ -10,44 +9,36 @@ function booleanJSONCNF(expression) {
   // De Morgan's
   // ¬(p ∨ q) ⇔ (p ∧ q)
   else if (
-    'not' in expression &&
+    isANegation(expression) &&
     !isAVariable(expression.not) &&
-    'or' in expression.not )
-  { p = booleanJSONCNF(expression.not.or[0])
-    q = booleanJSONCNF(expression.not.or[1])
-    return {
-      and: [
-        { not: p },
-        { not: q } ] } }
+    isADisjunction(expression.not) )
+  { return {
+      and: expression.not.or.map(function(dijunct) {
+        return { not: booleanJSONCNF(dijunct) } }) } }
 
   // De Morgan's
   // ¬(p ∧ q) ⇔ (p ∨ q)
   else if (
-    'not' in expression &&
+    isANegation(expression) &&
     !isAVariable(expression.not) &&
-    'and' in expression.not )
-  { p = booleanJSONCNF(expression.not.and[0])
-    q = booleanJSONCNF(expression.not.and[1])
-    return {
-      or: [
-        { not: p },
-        { not: q } ] } }
+    isAConjunction(expression.not) )
+  { return {
+      or: expression.not.and.map(function(conjunct) {
+        return { not: booleanJSONCNF(conjunct) } }) } }
 
   // Double Negation
   // (¬¬p) ⇔ (p)
   else if (
-    'not' in expression &&
-    !isAVariable(expression.not) &&
-    'not' in expression.not )
-  { p = booleanJSONCNF(expression.not.not)
-    return p }
+    isANegation(expression) &&
+    isANegation(expression.not) )
+  { return booleanJSONCNF(expression.not.not) }
 
   // Distribution
-  // (p ∨ (q ∧ r)) ⇔ ((p ∨ q) ∧ (p ∨ r))
+  // (p ∨ q ∨ (r ∧ s ∧ t)) ⇔ ((p ∨ q) ∧ (p ∨ r) ∧ (p ∨ s))
   else if (
-    'or' in expression &&
-    !isAVariable(expression.or[0]) &&
-    'and' in expression.or[0] )
+    isADisjunction(expression) &&
+    expression.or.some(function(disjunct) {
+      return isAConjunction(disjunct) }) )
   { q = booleanJSONCNF(expression.or[0].and[0])
     r = booleanJSONCNF(expression.or[0].and[1])
     p = booleanJSONCNF(expression.or[1])
@@ -59,7 +50,7 @@ function booleanJSONCNF(expression) {
   // Distribution
   // ((q ∧ r) ∨ p) ⇔ ((p ∨ q) ∧ (p ∨ r))
   else if (
-    'or' in expression &&
+    isADisjunction(expression) &&
     !isAVariable(expression.or[1]) &&
     'and' in expression.or[1] )
   { p = booleanJSONCNF(expression.or[0])
@@ -73,4 +64,14 @@ function booleanJSONCNF(expression) {
   else {
     return expression } }
 
-module.exports = booleanJSONCNF
+function isAVariable(expression) {
+  return ( typeof expression === 'string' ) }
+
+function isANegation(expression) {
+  return ( 'not' in expression) }
+
+function isADisjunction(expression) {
+  return ( 'or' in expression) }
+
+function isAConjunction(expression) {
+  return ( 'and' in expression) }

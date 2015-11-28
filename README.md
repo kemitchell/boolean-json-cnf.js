@@ -10,10 +10,10 @@ The package exports a function of one [boolean-json](https://npmjs.com/packages/
 var assert = require('assert')
 
 assert.deepEqual(
-  // ¬(p ∨ q)
-  normalize({ not: { or: [ 'p', 'q' ] } }),
-  // (¬p ∧ ¬q)
-  { and: [ { not: 'p' }, { not: 'q' } ] })
+  // ¬(p ∨ q ∨ r)
+  normalize({ not: { or: [ 'p', 'q', 'r' ] } }),
+  // (¬p ∧ ¬q ∧ ¬r)
+  { and: [ { not: 'p' }, { not: 'q' }, { not: 'r' } ] })
 
 assert.deepEqual(
   // ¬(p ∧ q)
@@ -34,16 +34,24 @@ assert.deepEqual(
 
 # Distribution
 
+## Disjunction Over Disjunction
+
+```javascript
+assert.deepEqual(
+  // (p ∨ (q ∨ r))
+  normalize({ or: [ 'p', { or: [ 'q', 'r' ] } ] }),
+  // (p ∨ q ∨ r))
+  { or: [ 'p', 'q', 'r' ] })
+```
+
+## Disjunction Over Conjunction
+
 ```javascript
 assert.deepEqual(
   // (p ∨ (q ∧ r))
   normalize({ or: [ 'p', { and: [ 'q', 'r' ] } ] }),
   // ((p ∨ q) ∧ (p ∨ r))
-  { and: [ { or: [ 'p', 'q' ] }, { or: [ 'p', 'r' ] } ] })
-
-assert.deepEqual(
-  // ((q ∧ r) ∨ p)
-  normalize({ or: [ { and: [ 'q', 'r' ] }, 'p' ] }),
-  // ((p ∨ q) ∧ (p ∨ r))
-  { and: [ { or: [ 'p', 'q' ] }, { or: [ 'p', 'r' ] } ] })
+  { and: [
+      { or: [ 'p', 'q' ] },
+      { or: [ 'p', 'r' ] } ] })
 ```
