@@ -44,7 +44,9 @@ function normalize(expression) {
     return p }
 
   // Distribution
-  // (p ∨ (q ∧ r)) ⇔ ((p ∨ q) ∧ (p ∨ r))
+
+  // Conjunction First
+  // ((q ∧ r) ∨ p) ⇔ ((p ∨ q) ∧ (p ∨ r))
   else if (
     disjunction(expression) &&
     !variable(expression.or[0]) &&
@@ -57,8 +59,8 @@ function normalize(expression) {
         normalize({ or: [ p, q ] }),
         normalize({ or: [ p, r ] }) ] } }
 
-  // Distribution
-  // ((q ∧ r) ∨ p) ⇔ ((p ∨ q) ∧ (p ∨ r))
+  // Conjunction Second
+  // (p ∨ (q ∧ r)) ⇔ ((p ∨ q) ∧ (p ∨ r))
   else if (
     disjunction(expression) &&
     !variable(expression.or[1]) &&
