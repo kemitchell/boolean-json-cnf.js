@@ -18,7 +18,7 @@ assert.deepEqual(
 assert.deepEqual(
   // ¬(p ∧ q)
   normalize({ not: { and: [ 'p', 'q' ] } }),
-  // (p ∨ q)
+  // (¬p ∨ ¬q)
   { or: [ { not: 'p' }, { not: 'q' } ] })
 ```
 
