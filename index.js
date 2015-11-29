@@ -1,5 +1,4 @@
-function isAVariable(expression) {
-  return ( typeof expression === 'string' ) }
+module.exports = booleanJSONCNF
 
 function booleanJSONCNF(expression) {
   var p, q, r
@@ -73,4 +72,5 @@ function booleanJSONCNF(expression) {
   else {
     return expression } }
 
-module.exports = booleanJSONCNF
+function isAVariable(expression) {
+  return ( typeof expression === 'string' ) }
