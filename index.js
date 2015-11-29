@@ -8,15 +8,12 @@ function booleanJSONCNF(expression) {
 function normalize(expression) {
   var p, q, r
 
-  if (isAVariable(expression)) {
-    return expression }
-
   // De Morgan's
   // ¬(p ∨ q) ⇔ (p ∧ q)
-  else if (
-    'not' in expression &&
-    !isAVariable(expression.not) &&
-    'or' in expression.not )
+  if (
+    negation(expression) &&
+    !variable(expression.not) &&
+    disjunction(expression.not) )
   { p = normalize(expression.not.or[0])
     q = normalize(expression.not.or[1])
     return {
@@ -27,9 +24,9 @@ function normalize(expression) {
   // De Morgan's
   // ¬(p ∧ q) ⇔ (p ∨ q)
   else if (
-    'not' in expression &&
-    !isAVariable(expression.not) &&
-    'and' in expression.not )
+    negation(expression) &&
+    !variable(expression.not) &&
+    conjunction(expression.not) )
   { p = normalize(expression.not.and[0])
     q = normalize(expression.not.and[1])
     return {
@@ -40,18 +37,18 @@ function normalize(expression) {
   // Double Negation
   // (¬¬p) ⇔ (p)
   else if (
-    'not' in expression &&
-    !isAVariable(expression.not) &&
-    'not' in expression.not )
+    negation(expression) &&
+    !variable(expression.not) &&
+    negation(expression.not) )
   { p = normalize(expression.not.not)
     return p }
 
   // Distribution
   // (p ∨ (q ∧ r)) ⇔ ((p ∨ q) ∧ (p ∨ r))
   else if (
-    'or' in expression &&
-    !isAVariable(expression.or[0]) &&
-    'and' in expression.or[0] )
+    disjunction(expression) &&
+    !variable(expression.or[0]) &&
+    conjunction(expression.or[0]) )
   { q = normalize(expression.or[0].and[0])
     r = normalize(expression.or[0].and[1])
     p = normalize(expression.or[1])
@@ -63,9 +60,9 @@ function normalize(expression) {
   // Distribution
   // ((q ∧ r) ∨ p) ⇔ ((p ∨ q) ∧ (p ∨ r))
   else if (
-    'or' in expression &&
-    !isAVariable(expression.or[1]) &&
-    'and' in expression.or[1] )
+    disjunction(expression) &&
+    !variable(expression.or[1]) &&
+    conjunction(expression.or[1]) )
   { p = normalize(expression.or[0])
     q = normalize(expression.or[1].and[0])
     r = normalize(expression.or[1].and[1])
@@ -77,5 +74,23 @@ function normalize(expression) {
   else {
     return expression } }
 
-function isAVariable(expression) {
-  return ( typeof expression === 'string' ) }
+function conjunction(argument) {
+  return (
+    typeof argument === 'object' &&
+    'and' in argument ) }
+
+function disjunction(argument) {
+  return (
+    typeof argument === 'object' &&
+    'or' in argument ) }
+
+function negation(argument) {
+  return (
+    typeof argument === 'object' &&
+    'not' in argument ) }
+
+function variable(expression) {
+  return (
+    !conjunction(expression) &&
+    !disjunction(expression) &&
+    !negation(expression) ) }
