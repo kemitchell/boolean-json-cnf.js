@@ -1,6 +1,11 @@
 module.exports = booleanJSONCNF
 
+var bifurcate = require('boolean-json-bifurcate')
+
 function booleanJSONCNF(expression) {
+  return normalize(bifurcate(expression)) }
+
+function normalize(expression) {
   var p, q, r
 
   if (isAVariable(expression)) {
@@ -12,12 +17,12 @@ function booleanJSONCNF(expression) {
     'not' in expression &&
     !isAVariable(expression.not) &&
     'or' in expression.not )
-  { p = booleanJSONCNF(expression.not.or[0])
-    q = booleanJSONCNF(expression.not.or[1])
+  { p = normalize(expression.not.or[0])
+    q = normalize(expression.not.or[1])
     return {
       and: [
-        { not: p },
-        { not: q } ] } }
+        normalize({ not: p }),
+        normalize({ not: q }) ] } }
 
   // De Morgan's
   // ¬(p ∧ q) ⇔ (p ∨ q)
@@ -25,12 +30,12 @@ function booleanJSONCNF(expression) {
     'not' in expression &&
     !isAVariable(expression.not) &&
     'and' in expression.not )
-  { p = booleanJSONCNF(expression.not.and[0])
-    q = booleanJSONCNF(expression.not.and[1])
+  { p = normalize(expression.not.and[0])
+    q = normalize(expression.not.and[1])
     return {
       or: [
-        { not: p },
-        { not: q } ] } }
+        normalize({ not: p }),
+        normalize({ not: q }) ] } }
 
   // Double Negation
   // (¬¬p) ⇔ (p)
@@ -38,7 +43,7 @@ function booleanJSONCNF(expression) {
     'not' in expression &&
     !isAVariable(expression.not) &&
     'not' in expression.not )
-  { p = booleanJSONCNF(expression.not.not)
+  { p = normalize(expression.not.not)
     return p }
 
   // Distribution
@@ -47,13 +52,13 @@ function booleanJSONCNF(expression) {
     'or' in expression &&
     !isAVariable(expression.or[0]) &&
     'and' in expression.or[0] )
-  { q = booleanJSONCNF(expression.or[0].and[0])
-    r = booleanJSONCNF(expression.or[0].and[1])
-    p = booleanJSONCNF(expression.or[1])
+  { q = normalize(expression.or[0].and[0])
+    r = normalize(expression.or[0].and[1])
+    p = normalize(expression.or[1])
     return {
       and: [
-        { or: [ p, q ] },
-        { or: [ p, r ] } ] } }
+        normalize({ or: [ p, q ] }),
+        normalize({ or: [ p, r ] }) ] } }
 
   // Distribution
   // ((q ∧ r) ∨ p) ⇔ ((p ∨ q) ∧ (p ∨ r))
@@ -61,13 +66,13 @@ function booleanJSONCNF(expression) {
     'or' in expression &&
     !isAVariable(expression.or[1]) &&
     'and' in expression.or[1] )
-  { p = booleanJSONCNF(expression.or[0])
-    q = booleanJSONCNF(expression.or[1].and[0])
-    r = booleanJSONCNF(expression.or[1].and[1])
+  { p = normalize(expression.or[0])
+    q = normalize(expression.or[1].and[0])
+    r = normalize(expression.or[1].and[1])
     return {
       and: [
-        { or: [ p, q ] },
-        { or: [ p, r ] } ] } }
+        normalize({ or: [ p, q ] }),
+        normalize({ or: [ p, r ] }) ] } }
 
   else {
     return expression } }

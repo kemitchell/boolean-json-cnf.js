@@ -47,3 +47,19 @@ assert.deepEqual(
   // ((p ∨ q) ∧ (p ∨ r))
   { and: [ { or: [ 'p', 'q' ] }, { or: [ 'p', 'r' ] } ] })
 ```
+
+# K-ary boolean JSON expressions
+
+```javascript
+assert.deepEqual(
+  // ¬(p ∨ q ∨ r)
+  normalize({ not: { or: [ 'p', 'q', 'r' ] } }),
+  // (¬p ∧ ¬q ∧ ¬r)
+  { and: [ { not: 'p' }, { and: [ { not: 'q' }, { not: 'r' } ] } ] })
+
+assert.deepEqual(
+  // ¬(p ∧ q ∧ r)
+  normalize({ not: { and: [ 'p', 'q', 'r' ] } }),
+  // (¬p ∨ (¬q ∨ ¬r))
+  { or: [ { not: 'p' }, { or: [ { not: 'q' }, { not: 'r' } ] } ] })
+```

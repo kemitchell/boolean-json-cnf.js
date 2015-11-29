@@ -3,6 +3,9 @@
   "description": "convert boolean-json to conjunctive normal form",
   "version": "2.0.6",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
+  "dependencies": {
+    "boolean-json-bifurcate": "^0.1.0"
+  },
   "devDependencies": {
     "defence-cli": "~1.0.1",
     "replace-require-self": "~1.0.0"
