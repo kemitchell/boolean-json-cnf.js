@@ -32,7 +32,7 @@ assert.deepEqual(
   'p')
 ```
 
-# Distribution
+# Distribution of Disjunction onto Conjunction
 
 ```javascript
 assert.deepEqual(
