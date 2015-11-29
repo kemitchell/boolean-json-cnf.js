@@ -4,7 +4,7 @@ var normalize = require('boolean-json-cnf')
 
 The package exports a function of one [boolean-json](https://npmjs.com/packages/boolean-json-schema) object.
 
-# DeMorgan's Laws
+# De Morgan's Laws
 
 ```javascript
 var assert = require('assert')
@@ -32,7 +32,7 @@ assert.deepEqual(
   'p')
 ```
 
-# Distribution of Disjunction onto Conjunction
+# Distribution of Disjunction over Conjunction
 
 ```javascript
 assert.deepEqual(
