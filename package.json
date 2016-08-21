@@ -8,7 +8,8 @@
   },
   "devDependencies": {
     "defence-cli": "~1.0.1",
-    "replace-require-self": "~1.0.0"
+    "replace-require-self": "~1.0.0",
+    "standard": "^8.0.0-beta.5"
   },
   "keywords": [
     "algebra",
@@ -21,6 +22,6 @@
   "license": "MIT",
   "repository": "kemitchell/boolean-json-cnf.js",
   "scripts": {
-    "test": "defence README.md | replace-require-self | node"
+    "lint": "standard"
   }
 }
